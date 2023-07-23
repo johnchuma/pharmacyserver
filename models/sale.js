@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Sale.belongsTo(models.Product)
       Sale.belongsTo(models.User)
+      Sale.belongsTo(models.Stock)
       // define association here
     }
   }
@@ -24,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull:false
     },
-    price:{
-      type: DataTypes.FLOAT,
+    stockId:{
+      type: DataTypes.INTEGER,
       allowNull:false
-    },
+   },
     productId: {
       type: DataTypes.INTEGER,
       allowNull:false

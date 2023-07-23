@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Stock.belongsTo(models.Product)
+      Stock.hasMany(models.Sale)
     }
   }
   Stock.init({

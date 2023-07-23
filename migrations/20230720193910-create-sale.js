@@ -24,10 +24,10 @@ module.exports = {
         type: DataTypes.FLOAT,
         allowNull:false
       },
-      price:{
-        type: DataTypes.FLOAT,
+     stockId:{
+        type: DataTypes.INTEGER,
         allowNull:false
-      },
+     },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE

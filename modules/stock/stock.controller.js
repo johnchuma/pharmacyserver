@@ -83,7 +83,7 @@ const getOutOfStock = async (req, res) => {
             group: ['productId'],
             raw: true,
         });
-
+        
         // Create a mapping of productId to total sales amount
         const salesAmountMap = {};
         salesAmountByProduct.forEach((sale) => {
@@ -102,7 +102,26 @@ const getOutOfStock = async (req, res) => {
         errorResponse(res, error);
     }
 }
-
+const getProductStocks = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const product = await Product.findOne({
+            where:{
+                uuid
+            }
+            
+        })
+        const stock = await Stock.findAll({
+            where:{
+                productId:product.id
+            },
+            include:[Product]
+        })
+        successResponse(res,stock)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
 const getStocks = async(req,res)=>{
     try {
         const latestStocks = await Stock.findAll({
@@ -142,5 +161,5 @@ const deleteStock =  async(req,res)=>{
 }
 
 module.exports = {
-    addStock,getStocks,deleteStock,getExpiringProducts,getOutOfStock
+    addStock,getStocks,deleteStock,getExpiringProducts,getOutOfStock,getProductStocks
 }

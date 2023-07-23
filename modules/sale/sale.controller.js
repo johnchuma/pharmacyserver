@@ -1,11 +1,17 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Sale,Product,User} = require("../../models");
+const {Sale,Product,User,Stock} = require("../../models");
 const { Op } = require("sequelize");
 
 const addSale = async(req,res)=>{
     try {
         const uuid = req.params.uuid
-        const {amount,price,user_uuid} = req.body;
+        const {amount,user_uuid,stock_uuid} = req.body;
+
+        const stock = await Stock.findOne({
+            where:{
+                uuid:stock_uuid
+            }
+        })
          const user = await User.findOne({
             where:{
                 uuid:user_uuid
@@ -16,12 +22,12 @@ const addSale = async(req,res)=>{
                 uuid
             }
         })
-      
+         
         const response = await Sale.create({
             amount,
             productId:product.id,
+            stockId:stock.id,
             userId:user.id,
-            price
         })
         successResponse(res,response)
     } catch (error) {
@@ -29,24 +35,34 @@ const addSale = async(req,res)=>{
     }
 }
 
+const getProductSales = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+       
+        const product = await Product.findOne({
+            where:{
+                uuid
+            }
+        })
+        const sales = await Sale.findAll({
+            where:{
+                productId:product.id
+            },
+            include:[Product,User,Stock]
+        })
+        successResponse(res,sales)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
 
 const getSales = async(req,res)=>{
     try {
         const response = await Sale.findAll({
-            include:[User,Product]
+            include:[User,Product,Stock]
             })
-          // Calculate total sales
-          const totalSales = response.reduce((total, sale) => {
-            return total + sale.amount * sale.price;
-        }, 0);
-
-        // Add totalSales to the response object
-        const responseObject = {
-            sales: response,
-            totalSales: totalSales,
-        };
-
-        successResponse(res, responseObject);
+         
+        successResponse(res,response);
     } catch (error) {
          errorResponse(res,error)
     }
@@ -59,7 +75,7 @@ const getTodaySales = async (req, res) => {
         const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         
         const response = await Sale.findAll({
-            include: [User, Product],
+            include: [User,Product,Stock],
             where: {
                 createdAt: {
                     [Op.gte]: startOfDay,
@@ -68,23 +84,13 @@ const getTodaySales = async (req, res) => {
             }
         });
 
-        // Calculate total sales
-        const totalSales = response.reduce((total, sale) => {
-            return total + sale.amount * sale.price;
-        }, 0);
-
-        // Add totalSales to the response object
-        const responseObject = {
-            sales: response,
-            totalSales: totalSales,
-        };
-
-        successResponse(res, responseObject);
+        
+        successResponse(res, response);
     } catch (error) {
         errorResponse(res, error);
     }
 }
 
 module.exports = {
-    addSale,getSales,getTodaySales
+    addSale,getSales,getTodaySales,getProductSales
 }
