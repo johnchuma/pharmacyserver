@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "b1251425996696",
-    "password": "4c0b29f7",
-    "database": "heroku_076e9b938cb9b85",
-    "host": "us-cdbr-east-06.cleardb.net",
+    "username": "u290081935_john",
+    "password": "@NeemaFeruzi56664466",
+    "database": "u290081935_alkaterine",
+    "host": "srv1004.hstgr.io",
     "dialect": "mysql"
   },
   "test": {
-    "username": "b1251425996696",
-    "password": "4c0b29f7",
-    "database": "heroku_076e9b938cb9b85",
-    "host": "us-cdbr-east-06.cleardb.net",
+    "username": "u290081935_john",
+    "password": "@NeemaFeruzi56664466",
+    "database": "u290081935_alkaterine",
+    "host": "srv1004.hstgr.io",
     "dialect": "mysql"
   },
   "production": {
-    "username": "b1251425996696",
-    "password": "4c0b29f7",
-    "database": "heroku_076e9b938cb9b85",
-    "host": "us-cdbr-east-06.cleardb.net",
+    "username": "u290081935_john",
+    "password": "@NeemaFeruzi56664466",
+    "database": "u290081935_alkaterine",
+    "host": "srv1004.hstgr.io",
     "dialect": "mysql"
   }
 }
