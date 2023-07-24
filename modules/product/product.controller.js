@@ -30,33 +30,45 @@ const updateProduct = async(req,res)=>{
          errorResponse(res,error)
     }
 }
-const getProducts = async(req,res)=>{
+
+const getProducts = async (req, res) => {
     try {
-        const products = await Product.findAll()
-
-         const response = await Promise.all(products.map(async(item)=>{
-           const stocks =  await Stock.sum('amount',{where:{
-                productId:item.id
-            }})
-            const sales = await Sale.sum('amount',{where:{
-                productId:item.id
-            }})
-            let totalStocks = stocks??0;
-            let totalSales = sales??0
-            let currentStock =totalStocks- totalSales 
-            return {
-                id:item.id,
-                uuid:item.uuid,name:item.name,
-                quantityType:item.quantityType,
-                createdAt:item.createdAt,
-                currentStock}
-         }))
-        successResponse(res,response)
+      // Fetch all products along with their associated stock entries and sales
+      const products = await Product.findAll({
+        include: [
+          {
+            model: Stock,
+            as: "stocks",
+          },
+          {
+            model: Sale,
+            as: "sales",
+          },
+        ],
+      });
+  
+      // Calculate the total stock amount and total sales amount for each product
+      const productsWithStockInfo = products.map((product) => {
+        const totalStockAmount = product.stocks.reduce((acc, stock) => acc + stock.amount, 0);
+        const totalSaleAmount = product.sales.reduce((acc, sale) => acc + sale.amount, 0);
+        const currentStock = totalStockAmount - totalSaleAmount;
+  
+        return {
+          id: product.id,
+          uuid: product.uuid,
+          name: product.name,
+          quantityType: product.quantityType,
+          createdAt: product.createdAt,
+          currentStock,
+        };
+      });
+  
+      successResponse(res, productsWithStockInfo);
     } catch (error) {
-         errorResponse(res,error)
+      errorResponse(res, error);
     }
-}
-
+  };
+  
 const getOutOfStocks = async(req,res)=>{
     try {
         const products = await Product.findAll()

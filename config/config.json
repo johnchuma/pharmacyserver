@@ -7,10 +7,10 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "u290081935_john",
-    "password": "@NeemaFeruzi56664466",
-    "database": "u290081935_alkaterine",
-    "host": "srv1004.hstgr.io",
+    "username": "root",
+    "password": "",
+    "database": "pharmacy",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {

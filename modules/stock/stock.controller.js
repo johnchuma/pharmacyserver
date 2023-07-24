@@ -149,11 +149,12 @@ const getStocks = async(req,res)=>{
 const deleteStock =  async(req,res)=>{
     try {
         const uuid = req.params.uuid
-        const response = await Stock.findAll({
+        const stock = await Stock.findOne({
             where:{
                 uuid
             }
     })
+        await stock.destroy()
         successResponse(res,response)
     } catch (error) {
          errorResponse(res,error)
